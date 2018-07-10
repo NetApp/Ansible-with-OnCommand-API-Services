@@ -27,7 +27,7 @@ warnings.filterwarnings("ignore")
 
 
 def post():
-    url_path        = "/api/4.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
     if(storagevmkey!=None):
         url_path+="storage-vms/"+storagevmkey+"/advanced/jobs/"
     if(clusterkey!=None):
@@ -69,6 +69,7 @@ def main():
                 "port" : {"required": True, "type": "str"},
                 "user" : {"required": True, "type": "str"},
                 "password" : {"required": True, "type": "str"},
+                "api_version" : {"required": False, "choices": [ '3.0', '4.0', '5.0' ], type: "str", "default": '2.0'},
                 "storagevmkey" : {"required": False, "type": "str"},
                 "clusterkey" : {"required": False, "type": "str"},
                 "is_sensitive" : {"required": False, "type": "str"},
@@ -82,6 +83,7 @@ def main():
         global api_port
         global api_user_name
         global api_user_password
+        global api_version
 
         global storagevmkey
         storagevmkey   = module.params["storagevmkey"]
@@ -94,6 +96,7 @@ def main():
         api_port                = module.params["port"]
         api_user_name           = module.params["user"]
         api_user_password       = module.params["password"]
+        api_version             = module.params["api_version"]
 
         # Properties details
         global body

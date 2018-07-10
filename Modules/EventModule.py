@@ -27,7 +27,7 @@ warnings.filterwarnings("ignore")
 
 
 def get():
-    url_path        = "/api/2.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
 
     flag=0
 
@@ -88,7 +88,7 @@ def get():
     return json_response
 
 def post():
-    url_path        = "/api/2.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
     url_path+="events"
 
     payload={}
@@ -114,7 +114,7 @@ def post():
     return json_response
 
 def put():
-    url_path        = "/api/2.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
     url_path+="events/"
 
     payload={}
@@ -143,7 +143,7 @@ def put():
         return "Provide the object key"
 
 def delete():
-    url_path        = "/api/2.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
     url_path+="events/"
 
     if key != None:
@@ -183,6 +183,7 @@ def main():
                 "port" : {"required": True, "type": "str"},
                 "user" : {"required": True, "type": "str"},
                 "password" : {"required": True, "type": "str"},
+                "api_version" : {"required": False, "choices": [ '1.0', '2.0', '3.0', '4.0', '5.0' ], type: "str", "default": '2.0'},
                 "key" : {"required": False, "type": "str"},
                 "severity" : {"required": False, "type": "str"},
                 "created_timestamp" : {"required": False, "type": "str"},
@@ -200,6 +201,7 @@ def main():
         global api_port
         global api_user_name
         global api_user_password
+        global api_version
 
         global lun_key
         global nfs_share_key
@@ -208,6 +210,7 @@ def main():
         api_port                = module.params["port"]
         api_user_name           = module.params["user"]
         api_user_password       = module.params["password"]
+        api_version             = module.params["api_version"]
 
         # Properties details
         global key

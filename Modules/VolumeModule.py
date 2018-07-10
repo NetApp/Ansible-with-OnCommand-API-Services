@@ -27,7 +27,7 @@ warnings.filterwarnings("ignore")
 
 
 def get():
-    url_path        = "/api/2.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
 
     flag=0
 
@@ -59,6 +59,12 @@ def get():
             flag=1
         else:
             url_path+="&aggregate_key="+aggregate_key
+    if aggregate_keys != None:
+        if flag is 0:
+            url_path+="?aggregate_keys="+aggregate_keys
+            flag=1
+        else:
+            url_path+="&aggregate_keys="+aggregate_keys
     if export_policy_key != None:
         if flag is 0:
             url_path+="?export_policy_key="+export_policy_key
@@ -628,7 +634,7 @@ def get():
     return json_response
 
 def post():
-    url_path        = "/api/2.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
     url_path+="volumes"
 
     payload={}
@@ -640,6 +646,8 @@ def post():
         payload['storage_vm_key']=storage_vm_key
     if (aggregate_key != None) & (aggregate_key != key):
         payload['aggregate_key']=aggregate_key
+    if (aggregate_keys != None) & (aggregate_keys != key):
+        payload['aggregate_keys']=aggregate_keys
     if (export_policy_key != None) & (export_policy_key != key):
         payload['export_policy_key']=export_policy_key
     if (clone_parent_key != None) & (clone_parent_key != key):
@@ -834,7 +842,7 @@ def post():
     return json_response
 
 def put():
-    url_path        = "/api/2.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
     url_path+="volumes/"
 
     payload={}
@@ -846,6 +854,8 @@ def put():
         payload['storage_vm_key']=storage_vm_key
     if (aggregate_key != None) & (aggregate_key != key):
         payload['aggregate_key']=aggregate_key
+    if (aggregate_keys != None) & (aggregate_keys != key):
+        payload['aggregate_keys']=aggregate_keys
     if (export_policy_key != None) & (export_policy_key != key):
         payload['export_policy_key']=export_policy_key
     if (clone_parent_key != None) & (clone_parent_key != key):
@@ -1043,7 +1053,7 @@ def put():
         return "Provide the object key"
 
 def delete():
-    url_path        = "/api/2.0/ontap/"
+    url_path        = "/api/" + api_version + "/ontap/"
     url_path+="volumes/"
 
     if key != None:
@@ -1083,10 +1093,12 @@ def main():
                 "port" : {"required": True, "type": "str"},
                 "user" : {"required": True, "type": "str"},
                 "password" : {"required": True, "type": "str"},
+                "api_version" : {"required": False, "choices": [ '1.0', '2.0', '3.0', '4.0', '5.0' ], type: "str", "default": '2.0'},
                 "key" : {"required": False, "type": "str"},
                 "name" : {"required": False, "type": "str"},
                 "storage_vm_key" : {"required": False, "type": "str"},
                 "aggregate_key" : {"required": False, "type": "str"},
+                "aggregate_keys" : {"required": False, "type": "list"},
                 "export_policy_key" : {"required": False, "type": "str"},
                 "clone_parent_key" : {"required": False, "type": "str"},
                 "flex_cache_origin_key" : {"required": False, "type": "str"},
@@ -1190,6 +1202,7 @@ def main():
         global api_port
         global api_user_name
         global api_user_password
+        global api_version
 
         global lun_key
         global nfs_share_key
@@ -1198,6 +1211,7 @@ def main():
         api_port                = module.params["port"]
         api_user_name           = module.params["user"]
         api_user_password       = module.params["password"]
+        api_version             = module.params["api_version"]
 
         # Properties details
         global key
@@ -1208,6 +1222,8 @@ def main():
         storage_vm_key = module.params["storage_vm_key"]
         global aggregate_key
         aggregate_key = module.params["aggregate_key"]
+        global aggregate_keys
+        aggregate_keys = module.params["aggregate_keys"]
         global export_policy_key
         export_policy_key = module.params["export_policy_key"]
         global clone_parent_key
